@@ -28,7 +28,7 @@ variable "kube_proxy_version" {
 variable "vpc_cni_version" {
     type = string
     description = "EKS cluster vpc-cni version"
-    default = "v1.11.0-eksbuild.1"
+    default = "v1.11.2-eksbuild.1"
 }
 
 variable "coredns_version" {
@@ -55,21 +55,26 @@ variable "eks_worker_node_max_spot_price" {
   description = "Instance type of the worker nodes managed by the autoscaling group"
 }
 
-variable "eks_worker_min_nodes" {
+variable "eks_min_node_pool" {
   type        = string
-  default     = "1"
+  default     = "0"
   description = "Minimum number of nodes of the Auto scaling group"
 }
 
-variable "eks_worker_max_nodes" {
+variable "eks_max_node_pool" {
   type        = string
   default     = "2"
   description = "Maximum number of nodes of the Auto scaling group"
 }
 
 variable "eks_vpc_id" {
-  type        = string  
+  type        = string
   description = "VPC id for eks cluster"
+}
+
+variable "eks_aws_auth_users" {
+  type        = any
+  default     = []
 }
 
 variable "eks_assume_role" {

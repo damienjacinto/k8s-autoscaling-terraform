@@ -4,10 +4,10 @@ locals {
         {
             rolearn  = aws_iam_role.eks_worker_node_role.arn
             username = "system:node:{{EC2PrivateDNSName}}"
-            groups   = ["system:nodes","systeml:bootstrappers"]
+            groups   = ["system:nodes","system:bootstrappers"]
         },
     ]
-    aws_auth_users = []
+    aws_auth_users = var.eks_aws_auth_users
     aws_auth_accounts = []
     aws_auth_configmap_data = {
         mapRoles    = yamlencode(local.aws_auth_roles)

@@ -1,5 +1,5 @@
 locals {
-  cluster_name = "tf-k8s-autoscaling"
+  cluster_name = "k8s-autoscaling"
 }
 
 data "aws_availability_zones" "available" {}
@@ -28,16 +28,24 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"             = "1"
+    "karpenter.sh/discovery"                      = local.cluster_name
   }
 }
 
 module "eks" {
   source     = "./modules/eks"
-  eks_cluster_name = "k8s-autoscaling"
+  eks_cluster_name = local.cluster_name
   eks_vpc_id = module.vpc.vpc_id
-  eks_subnet_k8s_publics_ids =  module.vpc.public_subnets
-  eks_subnet_k8s_privates_ids =  module.vpc.private_subnets
+  eks_subnet_k8s_publics_ids = module.vpc.public_subnets
+  eks_subnet_k8s_privates_ids = module.vpc.private_subnets
   eks_assume_role = var.aws_assume_role
+  eks_aws_auth_users = [
+      {
+            userarn  = var.aws_iam_arn
+            username = "damien"
+            groups   = ["system:nodes","system:bootstrappers"]
+      },
+  ]
 }
 
 module "vpce" {
@@ -45,3 +53,19 @@ module "vpce" {
   vpce_vpc_id     = module.vpc.vpc_id
   vpce_vpc_cidr   = module.vpc.vpc_cidr_block
 }
+
+module "metrics_server" {
+  source           = "./modules/metrics-server"
+  eks_cluster_name = module.eks.eks_cluster_name
+  aws_assume_role  = var.aws_assume_role
+  version_chart    = "3.8.2"
+}
+
+module "aws_laodbalancer" {
+  source           = "./modules/aws-loadbalancer"
+  eks_cluster_name = module.eks.eks_cluster_name
+  aws_assume_role  = var.aws_assume_role
+  version_chart    = "1.4.1"
+  aws_load_balancer_controller_role_arn = module.eks.aws_lb_controller_role_arn
+}
+

@@ -43,7 +43,11 @@ resource "aws_security_group" "eks_worker_node" {
   description = "Security group for all nodes in the cluster"
   vpc_id      = var.eks_vpc_id
 
-  tags = merge({ "Name" = "tf-sg-eks-worker-nodes", "kubernetes.io/cluster/${var.eks_cluster_name}" = "owned" })
+  tags = merge({
+    "Name" = "tf-sg-eks-worker-nodes",
+    "kubernetes.io/cluster/${aws_eks_cluster.eks_cluster.name}" = "owned"
+    "karpenter.sh/discovery" = aws_eks_cluster.eks_cluster.name
+    }, local.tags)
 }
 
 resource "aws_security_group_rule" "allow_all_from_worker_node_to_world" {
