@@ -14,7 +14,7 @@ output "worker_nodes_role_arn" {
 # }
 
 output "eks_cluster_name" {
-  value       = aws_eks_cluster.eks_cluster.name
+  value = aws_eks_cluster.eks_cluster.name
 }
 
 output "worker_nodes_security_group" {
@@ -55,4 +55,8 @@ output "worker_nodes_instance_profile" {
 
 output "eks_cluster_endpoint" {
   value = aws_eks_cluster.eks_cluster.endpoint
+}
+
+output "external_dns_role_arn" {
+  value = aws_iam_role.external_dns_role.arn
 }

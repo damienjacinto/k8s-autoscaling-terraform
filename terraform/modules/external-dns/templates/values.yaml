@@ -1,0 +1,16 @@
+sources:
+  - service
+  - ingress
+provider: aws
+aws:
+  region: "eu-central-1"
+## Route53 has a ddos protection care if you go lower
+interval: 5m
+serviceAccount:
+  create: true
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: ${roleArn}
+securityContext:
+  fsGroup: 65534
+domainFilters: ${domainFilters}

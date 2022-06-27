@@ -33,20 +33,20 @@ data "aws_iam_policy_document" "karpenter" {
     sid    = "AccessEC2actions"
     effect = "Allow"
     actions = [
-        "iam:PassRole",
-        "ssm:GetParameter",
-        "ec2:CreateLaunchTemplate",
-        "ec2:CreateFleet",
-        "ec2:CreateTags",
-        "ec2:DescribeLaunchTemplates",
-        "ec2:DescribeInstances",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeInstanceTypes",
-        "ec2:DescribeInstanceTypeOfferings",
-        "ec2:DescribeAvailabilityZones",
-        "ec2:RunInstances",
-        "ec2:TerminateInstances"
+      "iam:PassRole",
+      "ssm:GetParameter",
+      "ec2:CreateLaunchTemplate",
+      "ec2:CreateFleet",
+      "ec2:CreateTags",
+      "ec2:DescribeLaunchTemplates",
+      "ec2:DescribeInstances",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeInstanceTypes",
+      "ec2:DescribeInstanceTypeOfferings",
+      "ec2:DescribeAvailabilityZones",
+      "ec2:RunInstances",
+      "ec2:TerminateInstances"
     ]
     resources = ["*"]
   }
@@ -72,10 +72,10 @@ resource "aws_iam_role_policy_attachment" "karpenter_attachment" {
 }
 
 resource "aws_launch_template" "eks_worker_karpenter_launch_template" {
-  name                                 = local.karpenter_launch_template_name
-  image_id                             = data.aws_ami.eks_worker_node_official_ami.id
-  user_data                            = base64encode(local.eks_worker_node_userdata)
-  vpc_security_group_ids               = [aws_security_group.eks_worker_node.id]
+  name                   = local.karpenter_launch_template_name
+  image_id               = data.aws_ami.eks_worker_node_official_ami.id
+  user_data              = base64encode(local.eks_worker_node_userdata)
+  vpc_security_group_ids = [aws_security_group.eks_worker_node.id]
   iam_instance_profile {
     name = aws_iam_instance_profile.eks_worker_node_role.name
   }

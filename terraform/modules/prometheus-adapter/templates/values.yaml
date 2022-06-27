@@ -1,0 +1,16 @@
+prometheus:
+  url: http://prometheus-server.prometheus.svc
+  port: 80
+rbac:
+  create: true
+logLevel: 10
+rules:
+  default: false
+  external:
+  - seriesQuery: 'altimeter'
+    resources:
+      template: <<.Resource>>
+    name:
+      matches: ^(.*)
+      as: "altimeter_increase"
+    metricsQuery: clamp_min(ceil(avg_over_time(altimeter[10s]))-ceil(avg_over_time(altimeter[5m])),0)

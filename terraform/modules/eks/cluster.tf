@@ -13,7 +13,7 @@ resource "aws_eks_cluster" "eks_cluster" {
     aws_iam_role_policy_attachment.eks_service_role_amazoneks_cluster_policy,
     aws_iam_role_policy_attachment.eks_service_role_amazoneks_service_policy,
   ]
-  
+
   tags = merge({ "Name" = "EKS cluster" }, local.tags)
 }
 
@@ -44,10 +44,10 @@ resource "aws_eks_addon" "coredns" {
 }
 
 resource "aws_eks_addon" "vpc-cni" {
-  cluster_name             = aws_eks_cluster.eks_cluster.name
-  addon_name               = "vpc-cni"
-  addon_version            = var.vpc_cni_version
-  resolve_conflicts        = "OVERWRITE"
+  cluster_name      = aws_eks_cluster.eks_cluster.name
+  addon_name        = "vpc-cni"
+  addon_version     = var.vpc_cni_version
+  resolve_conflicts = "OVERWRITE"
   tags = merge(
     local.tags,
     {

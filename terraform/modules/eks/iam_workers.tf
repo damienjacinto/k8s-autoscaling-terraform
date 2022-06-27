@@ -47,7 +47,7 @@ resource "aws_iam_policy" "eks_route53_policy" {
   name        = "tf-write-route53-worker-policy-${var.eks_cluster_name}"
   path        = "/"
   description = "Allow eks workers to update route53 for traefik's dns challenges"
-  policy = <<EOF
+  policy      = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [

@@ -1,15 +1,15 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: echo-service
-  namespace: app1
+  name: app2
+  namespace: app2
 spec:
   maxReplicas: 5
   minReplicas: 1
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: apps/v2
     kind: Deployment
-    name: echo-service
+    name: app2
   metrics:
     - type: Resource
       resource:
@@ -19,9 +19,6 @@ spec:
           averageUtilization: 60
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: 5
-      policies:
-        - type: Pods
-          value: 1
-          periodSeconds: 5
-
+      stabilizationWindowSeconds: 0
+    scaleUp:
+      stabilizationWindowSeconds: 0

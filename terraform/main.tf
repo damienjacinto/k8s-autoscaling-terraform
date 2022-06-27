@@ -5,8 +5,8 @@ locals {
 data "aws_availability_zones" "available" {}
 
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "3.2.0"
+  source               = "terraform-aws-modules/vpc/aws"
+  version              = "3.2.0"
   name                 = "main"
   cidr                 = "10.0.0.0/16"
   azs                  = data.aws_availability_zones.available.names
@@ -32,26 +32,31 @@ module "vpc" {
   }
 }
 
+module "dns" {
+  source    = "./modules/dns"
+  zone_name = var.aws_zone_name
+}
+
 module "eks" {
-  source     = "./modules/eks"
-  eks_cluster_name = local.cluster_name
-  eks_vpc_id = module.vpc.vpc_id
-  eks_subnet_k8s_publics_ids = module.vpc.public_subnets
+  source                      = "./modules/eks"
+  eks_cluster_name            = local.cluster_name
+  eks_vpc_id                  = module.vpc.vpc_id
+  eks_subnet_k8s_publics_ids  = module.vpc.public_subnets
   eks_subnet_k8s_privates_ids = module.vpc.private_subnets
-  eks_assume_role = var.aws_assume_role
+  eks_assume_role             = var.aws_assume_role
   eks_aws_auth_users = [
-      {
-            userarn  = var.aws_iam_arn
-            username = "damien"
-            groups   = ["system:nodes","system:bootstrappers"]
-      },
+    {
+      userarn  = var.aws_iam_arn
+      username = "damien"
+      groups   = ["system:nodes", "system:bootstrappers"]
+    },
   ]
 }
 
 module "vpce" {
-  source     = "./modules/vpce"
-  vpce_vpc_id     = module.vpc.vpc_id
-  vpce_vpc_cidr   = module.vpc.vpc_cidr_block
+  source        = "./modules/vpce"
+  vpce_vpc_id   = module.vpc.vpc_id
+  vpce_vpc_cidr = module.vpc.vpc_cidr_block
 }
 
 module "metrics_server" {
@@ -62,10 +67,27 @@ module "metrics_server" {
 }
 
 module "aws_laodbalancer" {
-  source           = "./modules/aws-loadbalancer"
-  eks_cluster_name = module.eks.eks_cluster_name
-  aws_assume_role  = var.aws_assume_role
-  version_chart    = "1.4.1"
+  source                                = "./modules/aws-loadbalancer"
+  eks_cluster_name                      = module.eks.eks_cluster_name
+  aws_assume_role                       = var.aws_assume_role
+  version_chart                         = "1.4.1"
   aws_load_balancer_controller_role_arn = module.eks.aws_lb_controller_role_arn
 }
 
+module "extenal_dns" {
+  source                      = "./modules/external-dns"
+  eks_cluster_name            = module.eks.eks_cluster_name
+  external_dns_domain_filters = split(",", module.dns.zone_dns_name)
+  external_dns_role_arn       = module.eks.external_dns_role_arn
+}
+
+module "prometheus" {
+  source                      = "./modules/prometheus"
+  eks_cluster_name            = module.eks.eks_cluster_name
+}
+
+module "prometheus-adapter" {
+  source                      = "./modules/prometheus-adapter"
+  eks_cluster_name            = module.eks.eks_cluster_name
+  prometheus_namespace        = module.prometheus.namespace
+}

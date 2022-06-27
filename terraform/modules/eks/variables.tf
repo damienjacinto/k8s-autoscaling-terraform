@@ -1,46 +1,46 @@
 variable "eks_cluster_name" {
-    type = string
-    description = "EKS cluster name"
+  type        = string
+  description = "EKS cluster name"
 }
 
 variable "eks_cluster_version" {
-    type = string
-    description = "EKS cluster version"
-    default = "1.22"
+  type        = string
+  description = "EKS cluster version"
+  default     = "1.22"
 }
 
 variable "eks_subnet_k8s_publics_ids" {
-    type = list(string)
-    description = "EKS cluster public subnet"
+  type        = list(string)
+  description = "EKS cluster public subnet"
 }
 
 variable "eks_subnet_k8s_privates_ids" {
-    type = list(string)
-    description = "EKS cluster public subnet"
+  type        = list(string)
+  description = "EKS cluster public subnet"
 }
 
 variable "kube_proxy_version" {
-    type = string
-    description = "EKS cluster kube_proxy version"
-    default = "v1.22.6-eksbuild.1"
+  type        = string
+  description = "EKS cluster kube_proxy version"
+  default     = "v1.22.6-eksbuild.1"
 }
 
 variable "vpc_cni_version" {
-    type = string
-    description = "EKS cluster vpc-cni version"
-    default = "v1.11.2-eksbuild.1"
+  type        = string
+  description = "EKS cluster vpc-cni version"
+  default     = "v1.11.2-eksbuild.1"
 }
 
 variable "coredns_version" {
-    type = string
-    description = "EKS cluster core_dns version"
-    default = "v1.8.7-eksbuild.1"
+  type        = string
+  description = "EKS cluster core_dns version"
+  default     = "v1.8.7-eksbuild.1"
 }
 
 variable "eks_worker_node_ami_version" {
-    type = string
-    description = "EKS AMI(provided by Amazon) used for worker nodes"
-    default = "*"
+  type        = string
+  description = "EKS AMI(provided by Amazon) used for worker nodes"
+  default     = "*"
 }
 
 variable "eks_worker_node_instance_type" {
@@ -73,8 +73,8 @@ variable "eks_vpc_id" {
 }
 
 variable "eks_aws_auth_users" {
-  type        = any
-  default     = []
+  type    = any
+  default = []
 }
 
 variable "eks_assume_role" {

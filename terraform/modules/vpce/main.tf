@@ -11,11 +11,11 @@ resource "aws_security_group" "vpce" {
   vpc_id      = var.vpce_vpc_id
 
   ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = [var.vpce_vpc_cidr]
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpce_vpc_cidr]
   }
 
   egress {
@@ -32,12 +32,12 @@ resource "aws_security_group" "vpce" {
 }
 
 resource "aws_vpc_endpoint" "vpce" {
-  for_each = toset(local.services)
-  vpc_id       = var.vpce_vpc_id
-  service_name = "com.amazonaws.${data.aws_region.current.name}.${each.value}"
+  for_each            = toset(local.services)
+  vpc_id              = var.vpce_vpc_id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.${each.value}"
   private_dns_enabled = true
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = var.vpce_subnet_ids
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = var.vpce_subnet_ids
 
   security_group_ids = [
     aws_security_group.vpce.id,

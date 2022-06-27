@@ -1,0 +1,19 @@
+alertmanager:
+  enabled: false
+  persistentVolume:
+    storageClass: "gp2"
+pushgateway:
+  enabled: false
+server:
+  statefulSet:
+    enabled: true
+  persistentVolume:
+    storageClass: "gp2"
+extraScrapeConfigs: |
+  - job_name: 'prometheus-rasberrypi'
+    scrape_interval: 5s
+    scrape_timeout: 4s
+    metrics_path: /
+    static_configs:
+      - targets:
+        - djacinto.pagekite.me

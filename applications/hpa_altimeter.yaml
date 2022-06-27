@@ -1,0 +1,27 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: app2
+  name: hpa-external-altimeter
+  namespace: app2
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app2
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: "altimeter_increase"
+        target:
+          type: AverageValue
+          value: "1"
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 0
+    scaleUp:
+      stabilizationWindowSeconds: 0

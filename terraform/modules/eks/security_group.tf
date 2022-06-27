@@ -44,10 +44,10 @@ resource "aws_security_group" "eks_worker_node" {
   vpc_id      = var.eks_vpc_id
 
   tags = merge({
-    "Name" = "tf-sg-eks-worker-nodes",
+    "Name"                                                      = "tf-sg-eks-worker-nodes",
     "kubernetes.io/cluster/${aws_eks_cluster.eks_cluster.name}" = "owned"
-    "karpenter.sh/discovery" = aws_eks_cluster.eks_cluster.name
-    }, local.tags)
+    "karpenter.sh/discovery"                                    = aws_eks_cluster.eks_cluster.name
+  }, local.tags)
 }
 
 resource "aws_security_group_rule" "allow_all_from_worker_node_to_world" {

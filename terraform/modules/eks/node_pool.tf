@@ -4,11 +4,11 @@ locals {
 }
 
 resource "aws_launch_template" "eks_worker_launch_template" {
-  name                                 = local.launch_template_name
-  image_id                             = data.aws_ami.eks_worker_node_official_ami.id
-  user_data                            = base64encode(local.eks_worker_node_userdata)
-  vpc_security_group_ids               = [aws_security_group.eks_worker_node.id]
-  instance_type                        = var.eks_worker_node_instance_type
+  name                   = local.launch_template_name
+  image_id               = data.aws_ami.eks_worker_node_official_ami.id
+  user_data              = base64encode(local.eks_worker_node_userdata)
+  vpc_security_group_ids = [aws_security_group.eks_worker_node.id]
+  instance_type          = var.eks_worker_node_instance_type
 
   lifecycle {
     create_before_destroy = true
