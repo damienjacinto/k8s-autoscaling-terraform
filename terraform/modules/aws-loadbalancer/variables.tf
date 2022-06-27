@@ -1,6 +1,6 @@
 variable "version_chart" {
   type        = string
-  description = "Metrics server chart version"
+  description = "aws loadbalancer chart version"
 }
 
 variable "aws_assume_role" {

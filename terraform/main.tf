@@ -99,3 +99,8 @@ module "karpenter" {
   cluster_endpoint              = module.eks.eks_cluster_endpoint
   karpenter_role_arn            = module.eks.karpenter_role_arn
 }
+
+module "vpa" {
+  source                        = "./modules/vpa"
+  eks_cluster_name              = module.eks.eks_cluster_name
+}
