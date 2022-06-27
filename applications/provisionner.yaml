@@ -1,0 +1,35 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: exemple1
+  namespace: karpenter
+spec:
+  requirements:
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"]
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["spot"]
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["t3.xlarge", "r5.large"]
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values: ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
+  limits:
+    resources:
+      cpu: "12"
+      memory: 50Gi
+  provider:
+    subnetSelector:
+      karpenter.sh/discovery: k8s-autoscaling
+    launchTemplate: karpenter-k8s-autoscaling
+  ttlSecondsAfterEmpty: 10
+  labels:
+    node.kubernetes.io/lifecycle: spot
+    kubernetes.io/os: linux
+  taints:
+  - key: dedicated
+    value: "exemple1"
+    effect: NoSchedule

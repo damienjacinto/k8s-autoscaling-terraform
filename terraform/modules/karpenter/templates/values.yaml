@@ -1,0 +1,21 @@
+aws:
+  defaultInstanceProfile: ${defaultInstanceProfile}
+clusterEndpoint: ${clusterEndpoint}
+clusterName: ${clusterName}
+serviceAccount:
+  annotations:
+    "eks.amazonaws.com/role-arn": ${roleArn}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: karpenter.sh/provisioner-name
+          operator: DoesNotExist
+resources:
+  requests:
+    cpu: 200m
+    memory: 200Mi
+  limits:
+    cpu: 1
+    memory: 1Gi

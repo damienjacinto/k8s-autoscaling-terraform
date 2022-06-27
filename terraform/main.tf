@@ -91,3 +91,11 @@ module "prometheus-adapter" {
   eks_cluster_name            = module.eks.eks_cluster_name
   prometheus_namespace        = module.prometheus.namespace
 }
+
+module "karpenter" {
+  source                        = "./modules/karpenter"
+  eks_cluster_name              = module.eks.eks_cluster_name
+  worker_nodes_instance_profile = module.eks.worker_nodes_instance_profile
+  cluster_endpoint              = module.eks.eks_cluster_endpoint
+  karpenter_role_arn            = module.eks.karpenter_role_arn
+}
