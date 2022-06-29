@@ -104,3 +104,8 @@ module "vpa" {
   source                        = "./modules/vpa"
   eks_cluster_name              = module.eks.eks_cluster_name
 }
+
+module "locust" {
+  source                        = "./modules/locust"
+  eks_cluster_name              = module.eks.eks_cluster_name
+}

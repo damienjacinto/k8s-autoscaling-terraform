@@ -56,3 +56,38 @@ resource "aws_eks_node_group" "critical_node_group" {
     { Name = local.node_group_name }
   )
 }
+
+resource "aws_eks_node_group" "locust_node_group" {
+  cluster_name    = aws_eks_cluster.eks_cluster.name
+  node_group_name = "locust"
+  node_role_arn   = aws_iam_role.eks_worker_node_role.arn
+  subnet_ids      = var.eks_subnet_k8s_privates_ids
+  launch_template {
+    id      = aws_launch_template.eks_worker_launch_template.id
+    version = aws_launch_template.eks_worker_launch_template.latest_version
+  }
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 1
+    min_size     = 1
+  }
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      scaling_config[0].desired_size
+    ]
+  }
+
+  taint {
+    key = "reserved"
+    value = "locust"
+    effect = "NO_SCHEDULE"
+  }
+
+  tags = merge(
+    local.tags,
+    { Name = "locust" }
+  )
+}

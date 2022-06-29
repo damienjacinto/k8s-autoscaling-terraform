@@ -4,7 +4,7 @@ k apply -f hpa.yaml
 
 
 viddy kubectl resource-capacity -u -p -n app2
-hey --disable-keepalive -z 30m -c 50 -n 10 http://app2.damien-jacinto.com/
+hey --disable-keepalive -z 30m -c 50 -n 10
 
 
 vpa

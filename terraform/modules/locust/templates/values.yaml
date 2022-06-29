@@ -1,0 +1,7 @@
+loadtest:
+  locust_locustfile_configmap: "loadtest-locustfile"
+  locust_locustfile: "locustfile.py"
+tolerations:
+- key: "reserved"
+  value: "locust"
+  effect: NoSchedule
