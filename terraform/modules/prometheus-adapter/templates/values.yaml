@@ -13,4 +13,4 @@ rules:
     name:
       matches: ^(.*)
       as: "altimeter_increase"
-    metricsQuery: clamp_min(ceil(avg_over_time(altimeter[10s]))-ceil(avg_over_time(altimeter[5m])),0)
+    metricsQuery: clamp_min(ceil(avg_over_time(altimeter[20s]))-ceil(avg_over_time(altimeter[5m])),0)
